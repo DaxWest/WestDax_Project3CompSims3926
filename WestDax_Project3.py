@@ -49,3 +49,7 @@ def solution_system_eq_wd(rho_max, rad_wd=rad_wd_avg, step_size=step, rad_min_ap
 
     return scint.solve_ivp(system_eq_wd, range_radius, range_density, events=density_range)
 
+rho_max = 2.6e6
+wd_sol = solution_system_eq_wd(rho_max)
+print(wd_sol.y)
+print(wd_sol.t)
