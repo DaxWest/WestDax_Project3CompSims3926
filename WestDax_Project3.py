@@ -48,5 +48,12 @@ def solution_system_eq_wd(rho_max, rad_wd=rad_wd_avg, step_size=step, rad_min_ap
 
 rho_max = 2.6e6
 wd_sol = solution_system_eq_wd(rho_max, rad_wd=rad_wd_avg, step_size=step, rad_min_approx=zero_approx)
-print(wd_sol.y)
-print(wd_sol.t)
+
+#y[0] is density and y[1] is mass since system_eq_wd returns drho_dr first and dm_dr second
+radius_sol = wd_sol.t * R_0
+density_sol = wd_sol.y[0] * rho_0
+mass_sol = wd_sol.y[1] * M_0
+
+print(radius_sol)
+print(density_sol)
+print(mass_sol)
