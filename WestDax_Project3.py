@@ -22,18 +22,15 @@ rad_wd_avg = 7e8 #7000km in cm since WD stars tend to be about the radius of the
 zero_approx = 10**-100
 step = 1
 
-def system_eq_wd(r, ystate, R_0=R_0, M_0=M_0, rho_0=rho_0):
+def system_eq_wd(r, ystate):
     rho, m = ystate
 
-    RHO = rho / rho_0
-    x = (RHO) ** (1 / 3)
-    M = m / M_0
-    R = r / R_0
+    x = (rho) ** (1 / 3)
     gamma_x = (x ** 2) / (3 * np.sqrt(1 + x ** 2))
     # equation 8
-    drho_dr = - (M * RHO) / (gamma_x * R ** 2)
+    drho_dr = - (m * rho) / (gamma_x * r ** 2)
     # equation 9
-    dm_dr = (R ** 2) * RHO
+    dm_dr = (r ** 2) * rho
     return drho_dr, dm_dr
 
 #need to find the radius (range) of integration
@@ -50,6 +47,6 @@ def solution_system_eq_wd(rho_max, rad_wd=rad_wd_avg, step_size=step, rad_min_ap
     return scint.solve_ivp(system_eq_wd, range_radius, range_density, events=density_range)
 
 rho_max = 2.6e6
-wd_sol = solution_system_eq_wd(rho_max)
+wd_sol = solution_system_eq_wd(rho_max, rad_wd=rad_wd_avg, step_size=step, rad_min_approx=zero_approx)
 print(wd_sol.y)
 print(wd_sol.t)
