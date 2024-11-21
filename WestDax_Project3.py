@@ -14,6 +14,7 @@ R_0 = 7.72e8 / mu_e
 M_0 = 5.67e33 / ((mu_e)**2)
 rho_0 = (8 * np.pi / 3) * ((const.m_e * const.c / const.h)**3) * (const.m_p * mu_e)
 
+rho_min = 10**-33
 
 def system_eq_wd(r, ystate, R_0=1, M_0=1, rho_0=1):
     rho, m = ystate
@@ -28,3 +29,10 @@ def system_eq_wd(r, ystate, R_0=1, M_0=1, rho_0=1):
     # equation 9
     dm_dr = (R ** 2) * RHO
     return drho_dr, dm_dr
+
+#need to find the radius (range) of integration
+def density_range(r, ystate, rho_min=0):
+    if ystate[0] < rho_min:
+        return 0
+    return ystate[0]
+
