@@ -1,15 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import astropy
+import csv
 import scipy.integrate as scint
-
-#importing constants
-from astropy import constants as const
-from astropy import units as unit
-from astropy.units.quantity_helper.function_helpers import solve
-
-#need planck constant (h), speed of light (c), mass of an electron (m_e), mass of a proton (m_p)
-#mu_e is the number of nucleons (of mass m_p) per electron. this is not a constant
 
 mu_e = 2 #from question 1
 
@@ -78,7 +70,7 @@ for i in range(len(rho_c)):
 fig = plt.figure()
 for i in range(len(density_sol)):
     plt.plot(mass_sol[i], radius_sol[i])
-plt.show()
+# plt.show()
 
 M_ch_estimation = []
 for i in range(len(mass_sol)):
@@ -107,6 +99,17 @@ for i in range(len(rho_c_3)):
 fig2 = plt.figure()
 for i in range(len(density_sol_3)):
     plt.plot(mass_sol_3[i], radius_sol_3[i])
-plt.show()
+# plt.show()
 
 #Question 4
+wd_mass = []
+wd_mass_unc = []
+wd_radius = []
+wd_radius_unc = []
+with open('wd_mass_radius.csv', 'r') as wd_mass_data:
+        for line in wd_mass_data.readlines()[1:]:
+            cols = line.strip().split(',')
+            wd_mass.append(cols[0])
+            wd_mass_unc.append(cols[1])
+            wd_radius.append(cols[2])
+            wd_radius_unc.append(cols[3])
