@@ -107,9 +107,11 @@ wd_mass_unc = []
 wd_radius = []
 wd_radius_unc = []
 with open('wd_mass_radius.csv', 'r') as wd_mass_data:
-        for line in wd_mass_data.readlines()[1:]:
-            cols = line.strip().split(',')
-            wd_mass.append(cols[0])
-            wd_mass_unc.append(cols[1])
-            wd_radius.append(cols[2])
-            wd_radius_unc.append(cols[3])
+    for line in wd_mass_data.readlines()[1:]:
+        cols = line.strip().split(',')
+        wd_mass.append(float(cols[0]))
+        wd_mass_unc.append(float(cols[1]))
+        wd_radius.append(float(cols[2]))
+        wd_radius_unc.append(float(cols[3]))
+
+print(wd_mass)
