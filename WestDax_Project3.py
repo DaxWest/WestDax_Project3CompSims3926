@@ -13,10 +13,18 @@ from astropy.units.quantity_helper.function_helpers import solve
 
 mu_e = 2 #from question 1
 
+R_sun = 695700000
+M_sun = 1.989e30
 M_ch = 5.836/ ((mu_e)**2)
-R_0 = 7.72e8 / mu_e
-M_0 = 5.67e33 / ((mu_e)**2)
-rho_0 = (8 * np.pi / 3) * ((const.m_e * const.c / const.h)**3) * (const.m_p * mu_e)
+R_0 = 7.72e6 / mu_e
+M_0 = 5.67e30 / ((mu_e)**2)
+
+m_e = 9.109e-31
+m_p = 1.672e-27
+c = 2.998e8
+h = 6.626e-34
+
+rho_0 = (8 * np.pi / 3) * ((m_e * c / h)**3) * (m_p * mu_e)
 
 #Question 1
 rho_min = 10**-1
@@ -50,7 +58,7 @@ def solution_system_eq_wd(rho_max, rad_wd=rad_wd_avg, step_size=step, rad_min_ap
 
 rho_max = 2.5e6
 rho_max_range = np.linspace(0.1, rho_max, 10)
-rho_c = np.logspace(-1, 6.5, 10)
+rho_c = np.logspace(0, 6.5, 10)
 
 radius_sol = []
 density_sol = []
@@ -59,10 +67,10 @@ mass_sol = []
 for i in range(len(rho_max_range)):
     wd_sol = solution_system_eq_wd(rho_c[i], rad_wd=rad_wd_avg, step_size=step, rad_min_approx=zero_approx)
 
-    rad_sol = wd_sol.t * R_0
+    rad_sol = wd_sol.t * R_0 / R_sun
     #y[0] is density and y[1] is mass since system_eq_wd returns drho_dr first and dm_dr second
     den_sol = wd_sol.y[0] * rho_0
-    m_sol = wd_sol.y[1] * M_0
+    m_sol = wd_sol.y[1] * M_0 / M_sun
 
     radius_sol.append(rad_sol)
     density_sol.append(den_sol)
@@ -72,23 +80,32 @@ for i in range(len(rho_max_range)):
 fig = plt.figure()
 for i in range(len(density_sol)):
     plt.plot(mass_sol[i], radius_sol[i])
-# plt.show()
+plt.show()
 
 M_ch_estimation = []
 for i in range(len(mass_sol)):
     M_ch_estimation.append(np.max(mass_sol[i]))
 
-print(np.max(M_ch_estimation) / 1.989e33) #this should be about 1.46 M_sun
+print(np.max(M_ch_estimation)) #this should be about 1.46 M_sun
 
 #Question 3
-rho_c_3 = [rho_c[0], rho_c[4], rho_c[9]]
+rho_c_3 = [rho_c[1], rho_c[4], rho_c[8]]
 radius_sol_3 = []
 density_sol_3 = []
 mass_sol_3 = []
 
 for i in range(len(rho_c_3)):
-    wd_sol_3 = solution_system_eq_wd(rho_c_3[i], rad_wd=rad_wd_avg, step_size=step, rad_min_approx=zero_approx, method='Radau')
+    wd_sol_3 = solution_system_eq_wd(rho_c_3[i], rad_wd=rad_wd_avg, step_size=step, rad_min_approx=zero_approx, method='RK23')
 
     rad_sol_3 = wd_sol_3.t * R_0
     den_sol_3 = wd_sol_3.y[0] * rho_0
     m_sol_3 = wd_sol_3.y[1] * M_0
+
+    radius_sol_3.append(rad_sol_3)
+    density_sol_3.append(den_sol_3)
+    mass_sol_3.append(m_sol_3)
+
+fig2 = plt.figure()
+for i in range(len(density_sol_3)):
+    plt.plot(mass_sol_3[i], radius_sol_3[i])
+plt.show()
