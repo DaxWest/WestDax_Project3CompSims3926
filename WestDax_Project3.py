@@ -56,15 +56,13 @@ def solution_system_eq_wd(rho_max, rad_wd=rad_wd_avg, step_size=step, rad_min_ap
     density_range.terminal = True
     return scint.solve_ivp(system_eq_wd, range_radius, range_density, events=density_range, method=method)
 
-rho_max = 2.5e6
-rho_max_range = np.linspace(0.1, rho_max, 10)
-rho_c = np.logspace(0, 6.5, 10)
+rho_c = np.logspace(0, 6.39, 10) #used trial and error to get upper limit. this was very close to upper bound given in the question
 
 radius_sol = []
 density_sol = []
 mass_sol = []
 
-for i in range(len(rho_max_range)):
+for i in range(len(rho_c)):
     wd_sol = solution_system_eq_wd(rho_c[i], rad_wd=rad_wd_avg, step_size=step, rad_min_approx=zero_approx)
 
     rad_sol = wd_sol.t * R_0 / R_sun
@@ -86,7 +84,8 @@ M_ch_estimation = []
 for i in range(len(mass_sol)):
     M_ch_estimation.append(np.max(mass_sol[i]))
 
-print(np.max(M_ch_estimation)) #this should be about 1.46 M_sun
+print(f'The estimation of the Chandrasekhar mass limit is: {np.max(M_ch_estimation)} Solar Masses')
+print(f'The true value of the Chandrasekhar mass limit is: {M_ch} Solar Masses')
 
 #Question 3
 rho_c_3 = [rho_c[1], rho_c[4], rho_c[8]]
@@ -109,3 +108,5 @@ fig2 = plt.figure()
 for i in range(len(density_sol_3)):
     plt.plot(mass_sol_3[i], radius_sol_3[i])
 plt.show()
+
+#Question 4
