@@ -114,4 +114,9 @@ with open('wd_mass_radius.csv', 'r') as wd_mass_data:
         wd_radius.append(float(cols[2]))
         wd_radius_unc.append(float(cols[3]))
 
-print(wd_mass)
+fig3 = plt.figure()
+for i in range(len(density_sol)):
+    plt.plot(mass_sol[i], radius_sol[i])
+plt.scatter(wd_mass, wd_radius)
+plt.errorbar(wd_mass, wd_radius, xerr=wd_mass_unc, yerr=wd_radius_unc, fmt='o')
+plt.show()
