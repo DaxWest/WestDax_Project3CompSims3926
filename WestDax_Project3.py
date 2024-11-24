@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import csv
 import scipy.integrate as scint
+from decimal import Decimal
 
 mu_e = 2 #from question 1
 
@@ -67,10 +68,19 @@ for i in range(len(rho_c)):
     mass_sol.append(m_sol)
 
 #Question 2
-fig = plt.figure()
+rho_legend = []
+for i in range(len(rho_c)):
+    legend = f'$\\rho$ = {Decimal(rho_c[i]):.2e}'
+    rho_legend.append(legend)
+
+fig = plt.figure(figsize=(8,6))
 for i in range(len(density_sol)):
     plt.plot(mass_sol[i], radius_sol[i])
-# plt.show()
+plt.title('Mass vs Radius for Various Maximum Internal Densities')
+plt.xlabel('Mass (solar masses)')
+plt.ylabel('Radius (solar radii)')
+plt.legend(rho_legend)
+plt.show()
 
 M_ch_estimation = []
 for i in range(len(mass_sol)):
@@ -88,14 +98,15 @@ mass_sol_3 = []
 for i in range(len(rho_c_3)):
     wd_sol_3 = solution_system_eq_wd(rho_c_3[i], rad_wd=rad_wd_avg, step_size=step, rad_min_approx=zero_approx, method='RK23')
 
-    rad_sol_3 = wd_sol_3.t * R_0
+    rad_sol_3 = wd_sol_3.t * R_0 / R_sun
     den_sol_3 = wd_sol_3.y[0] * rho_0
-    m_sol_3 = wd_sol_3.y[1] * M_0
+    m_sol_3 = wd_sol_3.y[1] * M_0 / M_sun
 
     radius_sol_3.append(rad_sol_3)
     density_sol_3.append(den_sol_3)
     mass_sol_3.append(m_sol_3)
 
+legend_method_comp = [f'$\\rho$ = {Decimal(rho_c[1]):.2e}', f'$\\rho$ = {Decimal(rho_c[4]):.2e}', f'$\\rho$ = {Decimal(rho_c[8]):.2e}']
 fig2, (ax1, ax2) = plt.subplots(1,2, figsize=(15,5))
 for i in range(len(density_sol_3)):
     ax1.plot(mass_sol_3[i], radius_sol_3[i])
@@ -104,7 +115,13 @@ ax2.plot(mass_sol[4], radius_sol[4])
 ax2.plot(mass_sol[8], radius_sol[8])
 ax1.set_title('Method: RK23')
 ax2.set_title('Mathod: RK45')
-# plt.show()
+ax1.legend(legend_method_comp)
+ax2.legend(legend_method_comp)
+ax1.set_xlabel('Mass (solar masses)')
+ax2.set_xlabel('Mass (solar masses)')
+ax1.set_ylabel('Radius (solar radii)')
+ax2.set_ylabel('Radius (solar radii)')
+plt.show()
 
 #Question 4
 wd_mass = []
