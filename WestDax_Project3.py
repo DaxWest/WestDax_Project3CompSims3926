@@ -5,7 +5,7 @@ import scipy.integrate as scint
 
 mu_e = 2 #from question 1
 
-R_sun = 695700000
+R_sun = 6.957e8
 M_sun = 1.989e30
 M_ch = 5.836/ ((mu_e)**2)
 R_0 = 7.72e6 / mu_e
@@ -96,9 +96,14 @@ for i in range(len(rho_c_3)):
     density_sol_3.append(den_sol_3)
     mass_sol_3.append(m_sol_3)
 
-fig2 = plt.figure()
+fig2, (ax1, ax2) = plt.subplots(1,2, figsize=(15,5))
 for i in range(len(density_sol_3)):
-    plt.plot(mass_sol_3[i], radius_sol_3[i])
+    ax1.plot(mass_sol_3[i], radius_sol_3[i])
+ax2.plot(mass_sol[1], radius_sol[1])
+ax2.plot(mass_sol[4], radius_sol[4])
+ax2.plot(mass_sol[8], radius_sol[8])
+ax1.set_title('Method: RK23')
+ax2.set_title('Mathod: RK45')
 # plt.show()
 
 #Question 4
@@ -117,6 +122,6 @@ with open('wd_mass_radius.csv', 'r') as wd_mass_data:
 fig3 = plt.figure()
 for i in range(len(density_sol)):
     plt.plot(mass_sol[i], radius_sol[i])
+plt.errorbar(wd_mass, wd_radius, xerr=wd_mass_unc, yerr=wd_radius_unc, color='k', ls='')
 plt.scatter(wd_mass, wd_radius)
-plt.errorbar(wd_mass, wd_radius, xerr=wd_mass_unc, yerr=wd_radius_unc, fmt='o')
 plt.show()
